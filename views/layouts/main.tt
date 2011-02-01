@@ -32,7 +32,7 @@
   <link rel="stylesheet" media="handheld" href="css/handheld.css?v=2">  -->
  
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
-  <script src="js/libs/modernizr-1.6.min.js"></script>
+  <script src="/javascripts/libs/modernizr-1.6.min.js"></script>
 
 </head>
 
@@ -43,12 +43,12 @@
         <h1>Perl Starter</h1>
         <nav class="toolbar">
             <li><a href="/">Home</a></li>                        
-            <li><a href="/newproject">Submit Project</a></li>            
-            <li><a href="/login">Login</a></li>
+            <li><a href="/project/new">Submit Project</a></li>            
+            <li><% IF session.user %><a href="logout">Logout</a><% ELSE %><a href="/login">Login</a><% END %></li>
             <li><a href="/register">Sign Up</a></li>
         </nav>
     </header>
-    
+    <% IF error %><div id="error"><% error %></div><% END %>
     <div id="main">
         <% content %>
     </div>
@@ -71,23 +71,23 @@
   <script type="text/javascript" charset="utf-8" src='http://github.com/aristus/sweet-justice/raw/master/sweet-justice.min.js'></script> 
 
   <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="js/libs/jquery-1.4.2.js"%3E%3C/script%3E'))</script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery-1.4.2.js"%3E%3C/script%3E'))</script>
   
   <!-- scripts concatenated and minified via ant build script-->
-  <script src="js/plugins.js"></script>
-  <script src="js/script.js"></script>
+  <script src="/javascripts/plugins.js"></script>
+  <script src="/javascripts/script.js"></script>
   <!-- end concatenated and minified scripts-->
   
   
   <!--[if lt IE 7 ]>
-    <script src="js/libs/dd_belatedpng.js"></script>
+    <script src="/javascripts/libs/dd_belatedpng.js"></script>
     <script> DD_belatedPNG.fix('img, .png_bg'); //fix any <img> or .png_bg background-images </script>
   <![endif]-->
 
   <!-- yui profiler and profileviewer - remove for production -->
-  <script src="js/profiling/yahoo-profiling.min.js"></script>
-  <script src="js/profiling/config.js"></script>
+  <script src="/javascripts/profiling/yahoo-profiling.min.js"></script>
+  <script src="/javascripts/profiling/config.js"></script>
   <!-- end profiling code -->
 
 

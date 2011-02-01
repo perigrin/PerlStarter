@@ -28,4 +28,4 @@ auto_reload: 0
 
 
 template: template_toolkit
-auto_page: 1
+kioku_dsn: 'dbi:SQLite:site.db'

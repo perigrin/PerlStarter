@@ -1,0 +1,23 @@
+
+<p class="copy sweet-justice">We're thrilled that you're interested in using
+Perl Starter and we can't wait to hear what you’d like to do. Please take a
+few minutes to tell us about your project. Thanks!</p>
+
+<form class="new-project" method="POST">
+        <div class="input"><label>What should we call your project?</label><br/><input type="text" name="name" style="width: 80ex;"></div>
+        <div class="input"><label>What wold you like to do? Please be as specific as possible. (400 words)</label><br/><textarea name="description" style="width: 80ex; height:20ex"> </textarea></div>
+        <div class="input"><label>What is the benefit to the Perl Community? (1000 words)</label><br/><textarea name="benefits" style="width: 80ex; height:20ex"> </textarea></div>
+        <div class="input"><label>Where can we find out more about you and your project?</label><br/><textarea name="more_info" style="width: 80ex; height:20ex"> </textarea></div>
+        <div class="input"><label>Which category fits your project?</label><br/>
+            <select name="category">
+                <option></option>
+                <option>Infrastructure</option>
+                <option>Application</option>
+                <option>Documentation</option>
+                <option>Event Planning</option>
+                <option>Other</option>
+            </select>
+        </div>
+        <div class="input"><label>How much are you looking to raise? (in USD)</label><br/>$ <input type="text" name="amount" style="width: 19ex; text-align: right" value="0.00"></div>
+        <div class="input" style="margin: 1ex 0"><input type="submit" name="go" style="border: 1px solid"></div>
+</form>

@@ -15,8 +15,8 @@ deserunt mollit anim id est laborum.</p>
     <% FOREACH project IN projects %>
     <li class="project">
         <img src="<% project.thumbnail %>">
-        <header><h3><a href="/project/<% project.id %>"><% project.name %></a></h3></header>
-        <p class="sweet-justice"><% project.short_description %></p>
+        <header><h3><a href="/project/<% project.id %>"><% project.name %> by <% project.user.id %></a></h3></header>
+        <p class="sweet-justice"><% project.description %></p>
     </li>
     <% END %>
 </ul>

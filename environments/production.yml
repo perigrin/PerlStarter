@@ -16,4 +16,4 @@ show_errors: 0
 route_cache: 1
 
 template: template_toolkit
-auto_page: 1
+kioku_dsn: 'dbi:SQLite:site.db'

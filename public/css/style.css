@@ -351,11 +351,24 @@ img {
     border-radius: 1ex;
     background-color: silver;
 }
+
 dt {
     float: left;
     clear: both;
 }
 dd { margin-left: 10ex;}
+
+.login label {
+    display: block;
+    float: left;
+    clear: both;
+    width: 10ex;
+    margin-right: 5px;
+}
+
+input { border: 1px solid }
+
+form.new-project div.input { margin: 2.5ex 0;}
 
 /*
  * Media queries for responsive design

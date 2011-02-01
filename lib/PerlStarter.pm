@@ -1,45 +1,37 @@
+use 5.12.2;
+
+{
+
+    package PerlStarter::User;
+    use Moose;
+    with qw(KiokuX::User);
+}
+
 {
 
     package PerlStarter::Project;
     use Moose;
+    use Digest::SHA1 qw(sha1_hex);
 
-    has id => (
-        isa     => 'Str',
-        reader  => 'kiokudb_object_id',
-        builder => 'generate_uuid'
-    );
-    has name => (
-        isa => 'Str',
-        is  => 'ro',
-        default => 'Super Cool Project Neo',
-    );
-    has [qw(short_description full_description)] => (
-        isa        => 'Str',
-        is         => 'ro',
-        lazy_build => 1
+    with qw( KiokuDB::Role::ID );
+
+    sub id { shift->kiokudb_object_id(@_) }
+
+    sub kiokudb_object_id { sha1_hex( shift->name ) }
+
+    has [qw(name description benefits category more_info)] => (
+        isa      => 'Str',
+        is       => 'ro',
+        required => 1,
     );
 
-    sub _build_short_description {
-        "Lorem ipsum dolor sit amet, consectetur
-        adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
-        qui officia deserunt mollit anim id est laborum.";
-    }
+    has user => (
+        isa      => 'PerlStarter::User',
+        is       => 'ro',
+        required => 1,
+    );
 
-
-    sub _build_full_description {
-        "<p>Lorem ipsum dolor sit amet, consectetur
-        adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
-        qui officia deserunt mollit anim id est laborum.</p>\n" x 3;
-    }
-    
+    has amount => ( isa => 'Num', is => 'ro', required => 1 );
 
     has thumbnail => (
         isa     => 'Str',
@@ -47,20 +39,20 @@
         default => '/images/perldancer.jpg'
     );
 
-    has [qw( owner category goal level )] => (   isa => 'Str',   is  => 'ro', default => '[TBA]' );
-
-    with qw(
-      KiokuDB::Role::ID
-      KiokuDB::Role::UUIDs
-    );
-
 }
+
 {
 
     package PerlStarter;
     use Dancer ':syntax';
     our $VERSION = '0.1';
     use KiokuX::Model;
+    use KiokuX::User::Util qw(crypt_password);
+    use Try::Tiny;
+
+    set session   => 'Simple';
+    set kioku_dsn => 'dbi:SQLite:site.db';
+    set template  => 'template_toolkit';
 
     sub kioku {
         KiokuX::Model->new(
@@ -70,19 +62,94 @@
     }
 
     get '/' => sub {
-        template 'index', {
-            projects => [
-                map { PerlStarter::Project->new( name => "Project $_" ) }
-                  ( 1 .. 3 )
-            ],
-            ,    # kioku->search({ class => 'PerlStarter::Project'})->all
-        };
+        my $projects = undef;
+        try {
+            my $k     = kioku();
+            my $scope = $k->new_scope;
+            my $projects =
+              [ $k->search( { class => 'PerlStarter::Project' } )->all ];
+            template 'index.tt', { projects => $projects };
+        }
+        catch {
+            template 'index.tt', { error => $_ };
+        }
     };
-    
+
+    # This must come before the more generic /project/:id path
+    # otherwise that one will clobber this one
+    any [ 'get', 'post' ] => '/project/new' => sub {
+        return redirect '/login' unless session->{user};
+        return template 'project/new.tt' unless request->method() eq 'POST';
+        try {
+            my $k     = kioku();
+            my $scope = $k->new_scope;
+            my $conf  = params();
+            $conf->{user} = $k->lookup( session->{user}->kiokudb_object_id );
+            my $project = PerlStarter::Project->new($conf);
+            $k->store($project);
+            redirect "/project/${\$project->kiokudb_object_id}";
+        }
+        catch {
+            template 'project/new.tt', { error => $_ };
+        }
+
+    };
+
     get '/project/:id' => sub {
-        template 'project', {
-            project => PerlStarter::Project->new( id => params->{id})
-        };
+        try {
+            my $k       = kioku();
+            my $scope   = $k->new_scope;
+            my $project = $k->lookup( params->{id} );
+            template 'project/page.tt', { project => $project };
+        }
+        catch {
+            template 'project/new.tt', { error => $_ };
+        }
+    };
+
+    get '/logout' => sub {
+        session->destroy;
+        redirect '/';
+    };
+
+    any [ 'get', 'post' ] => '/login' => sub {
+        return template 'login.tt' unless request->method() eq 'POST';
+        try {
+            my $k     = kioku();
+            my $scope = $k->new_scope;
+            my $user  = $k->lookup( 'user:' . params->{username} )
+              or die 'Invalid username';
+            $user->check_password( params->{password} )
+              or die "Invalid password";
+            session user => $user;
+            redirect '/';
+        }
+        catch {
+            template 'login.tt', { error => $_ };
+        }
+    };
+
+    any [ 'get', 'post' ] => '/register' => sub {
+        return template 'register.tt'
+          unless request->method() eq 'POST';
+        try {
+            my $k     = kioku();
+            my $scope = $k->new_scope;
+
+            die 'password mismatch'
+              unless params->{password} eq params->{confirm};
+            debug "adding ${\params->{username}} => ${\params->{password}}";
+            my $user = PerlStarter::User->new(
+                id       => params->{username},
+                password => crypt_password( params->{password} ),
+            );
+            $k->store( session->{user} );
+            session user => $k->lookup( $user->kiokudb_object_id );
+            redirect '/login';
+        }
+        catch {
+            template 'register.tt', { error => $_ };
+        }
     };
 
     true;
