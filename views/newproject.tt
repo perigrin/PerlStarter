@@ -7,16 +7,12 @@ reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
 deserunt mollit anim id est laborum.</p>
 
-<header>
-    <h2>Current Projects</h2>
-</header>
 
-<ul class="projects">
-    <% FOREACH project IN projects %>
-    <li class="project">
-        <img src="<% project.thumbnail %>">
-        <header><h3><a href="/project/<% project.id %>"><% project.name %></a></h3></header>
-        <p class="sweet-justice"><% project.short_description %></p>
-    </li>
-    <% END %>
-</ul>
+<p class="copy sweet-justice">Lorem ipsum dolor sit amet, consectetur
+adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+deserunt mollit anim id est laborum.</p>
+
