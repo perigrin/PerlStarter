@@ -5,7 +5,7 @@
 
 <div class="project details">
 <img src="<% project.thumbnail %>">
-<p class=" sweet-justice"><% project.description %></p>
+<p class="copy sweet-justice"><% project.description %></p>
 <br/>
 <header style="clear:both"><h3>Benefits</h3></header>
 <p class="copy sweet-justice"><% project.benefits %></p>
@@ -15,9 +15,23 @@
 
 <div class="project breakout">
     <dl>
+        <dt>Created:</dt><dd><% project.created_timestamp.strftime('%c')%>
         <dt>Owner:</dt><dd><% project.user.id %></dd>
         <dt>Category:</dt><dd><% project.category %></dd>        
         <dt>Goal:</dt><dd>$<% project.amount %> (USD)</dd>
+        <dt>Raised:</dt><dd>$<% project.total_pledged %> (USD)</dd>
     </dl>
 </div>
 
+
+<div class="project breakout" style="margin: 5ex 0px 0px 0px;">
+    <% IF session.user %>
+    <form method="POST" action="/project/<% project.id %>/pledges">
+        <div class="input" style="margin: 1ex 0;"><label>Pledge Amount (in USD)</label><br/>$ <input type="text" name="amount" style="width: 19ex; text-align: right" value="0.00"></div>
+        <input type="submit" name="Pledge!" />
+        <input type="hidden" name="project_id" value="<% project.id %>">
+    </form>
+    <% ELSE %>
+        <% PROCESS login.tt next_resource = "/project/$project.id" %>
+    <% END %>
+</div>

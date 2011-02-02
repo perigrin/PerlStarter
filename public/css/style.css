@@ -295,14 +295,12 @@ body > header {
 p.copy { 
     margin: 1ex 0px;
     padding: 1ex;
-    clear: both;
-    
 }
 
-#main  p:first-line {
+#main  p.copy:first-line {
     position:relative;
 }
-#main p:first-letter {
+#main p.copy:first-letter {
     letter-spacing:0;
     font-size:150%;
     float:left;

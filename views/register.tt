@@ -6,4 +6,5 @@
 <div class="input" style="margin: 1ex 0"><label style="display: block;float:left; width: 10ex; margin-right: 5px">Password</label><input type="password" name="password" style="border: 1px solid"></div>
 <div class="input" style="margin: 1ex 0"><label style="display: block;float:left; width: 10ex; margin-right: 5px">Confirm Password</label><input type="password" name="confirm" style="border: 1px solid"></div>
 <div class="input" style="margin: 1ex 0"><input type="submit" name="go" style="border: 1px solid"></div>
+<input type="hidden" name="next" value="<% next_resource %>">
 </form>

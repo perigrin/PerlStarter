@@ -2,47 +2,6 @@ use 5.12.2;
 
 {
 
-    package PerlStarter::User;
-    use Moose;
-    with qw(KiokuX::User);
-}
-
-{
-
-    package PerlStarter::Project;
-    use Moose;
-    use Digest::SHA1 qw(sha1_hex);
-
-    with qw( KiokuDB::Role::ID );
-
-    sub id { shift->kiokudb_object_id(@_) }
-
-    sub kiokudb_object_id { sha1_hex( shift->name ) }
-
-    has [qw(name description benefits category more_info)] => (
-        isa      => 'Str',
-        is       => 'ro',
-        required => 1,
-    );
-
-    has user => (
-        isa      => 'PerlStarter::User',
-        is       => 'ro',
-        required => 1,
-    );
-
-    has amount => ( isa => 'Num', is => 'ro', required => 1 );
-
-    has thumbnail => (
-        isa     => 'Str',
-        is      => 'ro',
-        default => '/images/perldancer.jpg'
-    );
-
-}
-
-{
-
     package PerlStarter;
     use Dancer ':syntax';
     our $VERSION = '0.1';
@@ -107,13 +66,43 @@ use 5.12.2;
         }
     };
 
-    get '/logout' => sub {
+    post '/project/:id/pledges' => sub {
+        my ( $k, $scope, $project );
+
+        try {
+            $k       = kioku;
+            $scope   = $k->new_scope;
+            $project = $k->lookup( params->{id} );
+        }
+        catch {
+            template 'project/new.tt', { error => $_ };
+        };
+
+        try {
+            my $conf = params;
+            $conf->{user}    = $k->lookup( session->{user}->kiokudb_object_id );
+            $conf->{project} = $project;
+            my $pledge = PerlStarter::Pledge->new($conf);
+            $project->add_pledge($pledge);
+            $k->store($project);
+            redirect "/project/${\$project->id}";
+        }
+        catch {
+            template 'project/page.tt' => {
+                project => $project,
+                error   => $_
+            };
+        };
+    };
+
+    any [ 'get', 'post' ] => '/logout' => sub {
         session->destroy;
         redirect '/';
     };
 
     any [ 'get', 'post' ] => '/login' => sub {
         return template 'login.tt' unless request->method() eq 'POST';
+
         try {
             my $k     = kioku();
             my $scope = $k->new_scope;
@@ -122,7 +111,7 @@ use 5.12.2;
             $user->check_password( params->{password} )
               or die "Invalid password";
             session user => $user;
-            redirect '/';
+            redirect params->{next_resource} || '/';
         }
         catch {
             template 'login.tt', { error => $_ };
@@ -130,8 +119,8 @@ use 5.12.2;
     };
 
     any [ 'get', 'post' ] => '/register' => sub {
-        return template 'register.tt'
-          unless request->method() eq 'POST';
+        return template 'register.tt' unless request->method() eq 'POST';
+
         try {
             my $k     = kioku();
             my $scope = $k->new_scope;
@@ -143,9 +132,9 @@ use 5.12.2;
                 id       => params->{username},
                 password => crypt_password( params->{password} ),
             );
-            $k->store( session->{user} );
+            $k->store($user);
             session user => $k->lookup( $user->kiokudb_object_id );
-            redirect '/login';
+            redirect params->{next_resource} || '/';
         }
         catch {
             template 'register.tt', { error => $_ };
@@ -154,3 +143,111 @@ use 5.12.2;
 
     true;
 }
+
+# all of the packages below will use DateTIme so let's load it here.
+use DateTime;
+
+{
+
+    package PerlStarter::User;
+    use Moose;
+    with qw(KiokuX::User);
+
+    has created_timestamp => (
+        isa      => 'DateTime',
+        is       => 'ro',
+        init_arg => undef,
+        default  => sub { DateTime->now },
+    );
+
+}
+
+{
+
+    package PerlStarter::Project;
+    use Moose;
+    use List::Util qw(sum);
+    use Digest::SHA1 qw(sha1_hex);
+
+    with qw( KiokuDB::Role::ID );
+
+    sub id { shift->kiokudb_object_id(@_) }
+
+    sub kiokudb_object_id { sha1_hex( shift->name ) }
+
+    has [qw(name description benefits category more_info)] => (
+        isa      => 'Str',
+        is       => 'ro',
+        required => 1,
+    );
+
+    has user => (
+        isa      => 'PerlStarter::User',
+        is       => 'ro',
+        required => 1,
+    );
+
+    has amount => ( isa => 'Num', is => 'ro', required => 1 );
+
+    has thumbnail => (
+        isa     => 'Str',
+        is      => 'ro',
+        default => '/images/perldancer.jpg'
+    );
+
+    has pledges => (
+        isa     => 'ArrayRef[PerlStarter::Pledge]',
+        traits  => ['Array'],
+        default => sub { [] },
+        lazy    => 1,
+        handles => {
+            add_pledge   => 'push',
+            list_pledges => 'elements',
+            has_pledges  => 'count',
+        }
+    );
+
+    sub total_pledged {
+        my $self = shift;
+        return '0.00' unless $self->has_pledges;
+        sum map { $_->amount } $self->list_pledges;
+    }
+
+    has created_timestamp => (
+        isa      => 'DateTime',
+        is       => 'ro',
+        init_arg => undef,
+        default  => sub { DateTime->now },
+    );
+
+}
+{
+
+    package PerlStarter::Pledge;
+    use Moose;
+
+    has user => (
+        isa      => 'PerlStarter::User',
+        is       => 'ro',
+        required => 1,
+    );
+
+    has project => (
+        isa      => 'PerlStarter::Project',
+        is       => 'ro',
+        required => 1,
+    );
+
+    has amount => ( isa => 'Num', is => 'ro', required => 1 );
+
+    has created_timestamp => (
+        isa      => 'DateTime',
+        is       => 'ro',
+        init_arg => undef,
+        default  => sub { DateTime->now },
+    );
+
+}
+
+1;
+__END__

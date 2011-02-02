@@ -44,7 +44,7 @@
         <nav class="toolbar">
             <li><a href="/">Home</a></li>                        
             <li><a href="/project/new">Submit Project</a></li>            
-            <li><% IF session.user %><a href="logout">Logout</a><% ELSE %><a href="/login">Login</a><% END %></li>
+            <li><% IF session.user %><a href="/logout">Logout</a><% ELSE %><a href="/login">Login</a><% END %></li>
             <li><a href="/register">Sign Up</a></li>
         </nav>
     </header>
@@ -86,14 +86,14 @@
   <![endif]-->
 
   <!-- yui profiler and profileviewer - remove for production -->
-  <script src="/javascripts/profiling/yahoo-profiling.min.js"></script>
-  <script src="/javascripts/profiling/config.js"></script>
+  <!-- <script src="/javascripts/profiling/yahoo-profiling.min.js"></script>
+  <script src="/javascripts/profiling/config.js"></script> -->
   <!-- end profiling code -->
 
 
   <!-- asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet 
        change the UA-XXXXX-X to be your site's ID -->
-  <script>
+  <!-- <script>
    var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];
    (function(d, t) {
     var g = d.createElement(t),
@@ -102,7 +102,7 @@
     g.src = ('https:' == location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     s.parentNode.insertBefore(g, s);
    })(document, 'script');
-  </script>
+  </script> -->
   
 </body>
 </html>
