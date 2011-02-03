@@ -27,10 +27,10 @@ use 5.10.1;
             my $scope = $k->new_scope;
             my $projects =
               [ $k->search( { class => 'PerlStarter::Project' } )->all ];
-            template 'index.tt', { projects => $projects };
+            template 'index', { projects => $projects };
         }
         catch {
-            template 'index.tt', { error => $_ };
+            template 'index', { error => $_ };
         }
     };
 
@@ -38,7 +38,7 @@ use 5.10.1;
     # otherwise that one will clobber this one
     any [ 'get', 'post' ] => '/project/new' => sub {
         return redirect '/login' unless session->{user};
-        return template 'project/new.tt' unless request->method() eq 'POST';
+        return template 'project/new' unless request->method() eq 'POST';
         try {
             my $k     = kioku();
             my $scope = $k->new_scope;
@@ -49,7 +49,7 @@ use 5.10.1;
             redirect "/project/${\$project->kiokudb_object_id}";
         }
         catch {
-            template 'project/new.tt', { error => $_ };
+            template 'project/new', { error => $_ };
         }
 
     };
@@ -59,10 +59,10 @@ use 5.10.1;
             my $k       = kioku();
             my $scope   = $k->new_scope;
             my $project = $k->lookup( params->{id} );
-            template 'project/page.tt', { project => $project };
+            template 'project/page', { project => $project };
         }
         catch {
-            template 'project/new.tt', { error => $_ };
+            template 'project/new', { error => $_ };
         }
     };
 
@@ -75,7 +75,7 @@ use 5.10.1;
             $project = $k->lookup( params->{id} );
         }
         catch {
-            template 'project/new.tt', { error => $_ };
+            template 'project/new', { error => $_ };
         };
 
         try {
@@ -88,7 +88,7 @@ use 5.10.1;
             redirect "/project/${\$project->id}";
         }
         catch {
-            template 'project/page.tt' => {
+            template 'project/page' => {
                 project => $project,
                 error   => $_
             };
@@ -101,7 +101,7 @@ use 5.10.1;
     };
 
     any [ 'get', 'post' ] => '/login' => sub {
-        return template 'login.tt' unless request->method() eq 'POST';
+        return template 'login' unless request->method() eq 'POST';
 
         try {
             my $k     = kioku();
@@ -114,12 +114,12 @@ use 5.10.1;
             redirect params->{next_resource} || '/';
         }
         catch {
-            template 'login.tt', { error => $_ };
+            template 'login', { error => $_ };
         }
     };
 
     any [ 'get', 'post' ] => '/register' => sub {
-        return template 'register.tt' unless request->method() eq 'POST';
+        return template 'register' unless request->method() eq 'POST';
 
         try {
             my $k     = kioku();
@@ -137,7 +137,7 @@ use 5.10.1;
             redirect params->{next_resource} || '/';
         }
         catch {
-            template 'register.tt', { error => $_ };
+            template 'register', { error => $_ };
         }
     };
 
