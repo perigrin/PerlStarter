@@ -1,4 +1,5 @@
 use 5.10.1;
+# ABSTRACT: turns baubles into trinkets
 
 {
 
@@ -6,8 +7,11 @@ use 5.10.1;
     use Dancer ':syntax';
     our $VERSION = '0.1';
     use KiokuX::Model;
-    use KiokuX::User::Util qw(crypt_password);
+    use KiokuDB::Backend::DBI;    
+    use KiokuX::User::Util qw(crypt_password);    
     use Try::Tiny;
+
+    
 
     set session   => 'Simple';
     set kioku_dsn => 'dbi:SQLite:site.db';

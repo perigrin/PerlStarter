@@ -1,7 +1,8 @@
-
+<div id="login">
 <form method="POST" action="/login" form="login">
-<div class="input" style="margin: 1ex 0"><label>Username</label><input type="text" name="username" style="border: 1px solid;"></div>
-<div class="input" style="margin: 1ex 0"><label>Password</label><input type="password" name="password" style="border: 1px solid"></div>
-<div class="input" style="margin: 1ex 0"><input type="submit" name="go"></div>
+<div class="input"><label>Username</label><input type="text" name="username" ></div>
+<div class="input"><label>Password</label><input type="password" name="password" ></div>
+<div class="submit"><input type="submit" name="go" style=""></div>
 <input type="hidden" name="next_resource" value="<% next_resource %>">
 </form>
+</div>

@@ -77,7 +77,7 @@ input, select { vertical-align:middle; }
    * we normalize monospace styles ourselves
    * table font-size is reset in the HTML5 reset above so there is no need to repeat
 */
-body { font:13px/1.231 sans-serif; *font-size:small; } /* hack retained to preserve specificity */
+/*body { font:13px/1.231 sans-serif; *font-size:small; } /* hack retained to preserve specificity */*/
 
 select, input, textarea, button { font:99% sans-serif; }
 
@@ -93,10 +93,9 @@ pre, code, kbd, samp { font-family: monospace, sans-serif; }
 
 
 body, select, input, textarea { 
-  /* #444 looks better than black: twitter.com/H_FJ/statuses/11800719859 */ 
   color: #444; 
   /* set your base font here, to apply evenly */
-  /* font-family: Georgia, serif;  */   
+      font: normal 16px Garamond, Georgia, serif;
 }
 
 /* Headers (h1,h2,etc) have no default font-size or margin,
@@ -185,71 +184,186 @@ button {  width: auto; overflow: visible; }
 .ie7 img { -ms-interpolation-mode: bicubic; }
 
 
-
-/* 
- * Non-semantic helper classes 
- */
-
-/* for image replacement */
-.ir { display: block; text-indent: -999em; overflow: hidden; background-repeat: no-repeat; text-align: left; direction: ltr; }
-
-/* Hide for both screenreaders and browsers
-   css-discuss.incutio.com/wiki/Screenreader_Visibility */
-.hidden { display: none; visibility: hidden; } 
-
-/* Hide only visually, but have it available for screenreaders 
-   www.webaim.org/techniques/css/invisiblecontent/  &  j.mp/visuallyhidden  */
-.visuallyhidden { position: absolute !important;    
-  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
-  clip: rect(1px, 1px, 1px, 1px); }
-
-/* Hide visually and from screenreaders, but maintain layout */
-.invisible { visibility: hidden; }
-
-/* >> The Magnificent CLEARFIX: Updated to prevent margin-collapsing on child elements << j.mp/bestclearfix */
-.clearfix:before, .clearfix:after {
-  content: "\0020"; display: block; height: 0; visibility: hidden;	
-} 
-
-.clearfix:after { clear: both; }
-/* Fix clearfix: blueprintcss.lighthouseapp.com/projects/15318/tickets/5-extra-margin-padding-bottom-of-page */
-.clearfix { zoom: 1; }
-
-
-
-
-
-
  /* Primary Styles
     Author: 
  */
 
+
+/*
+ Pixels     Ems     % of 13
+ 063.974	75.998	8,184.415
+ 657.586	46.97	5,058.354
+ 406.419	29.03	3,126.300
+ 251.186	17.942	1,932.200
+ 155.245	11.089	1,194.192
+ 95.949	    6.854	738.069
+ 59.301	    4.236	456.162
+ 36.651	    2.618	281.931
+ 22.652     1.618	174.246
+ 14	        1       107.692
+ 8.653      0.618	66.562
+ 5.348      0.382	41.138
+ 3.305      0.236	25.423
+ 2.043      0.146	15.715
+ 1.263      0.09	9.715
+*/
+
 html {
+    background-color: #666;
+    overflow: auto;
+    width: 100%;
+    width:auto!important;
+    min-width: 100%;
+    min-height:100%;
+    height:auto!important;
+    height:100%;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+body { 
+    font-size: 14px;
+    line-height:1.45;
+    
+    margin: 0px;
+    padding: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    max-width: 75.998em;
+    overflow-y: auto;
+    overflow-x: visible;    
+
+    box-shadow: rgba(51, 51, 51, 0.9) 0px 0px 10px;
+    -webkit-box-shadow: rgba(51, 51, 51, 0.9) 0px 0px 10px;
+    -moz-box-shadow: rgba(51, 51, 51, 0.9) 0px 0px 10px;
+}
+
+header, footer {
+    min-width: 26em;
+    width: 100%;
+    height: 70px;
+    background-color: #004065;
+    color: white;    
+    clear: both;    
+    overflow-y: hidden;
+    overflow-x: hidden;
+    
+}
+
+header a, footer a, header a:visited, footer a:visited { color: white; }
+header a, header a:visited {     text-decoration: none; }
+header a:hover {     text-decoration: underline; }
+header h1 { float: left;     padding: 0px}
+header nav { padding-top: 1ex; float: right; }
+
+header nav {
+    width: 20em;
+    font-size: 150%;
+    font-variant: small-caps;
+    margin-top: 2ex;
+}
+
+header nav li {
+    list-style: none;
+    display: inline;
+    margin: 0.25em;
+    padding: 0.25em;
+}
+
+#content {
+    min-height: 480px;
+    padding: 1ex;    
+}
+
+
+h1 {
+    font-size: 4em; /* 64pt */
+}
+h2 { font-size: 2em; }
+h3 {
+    font-size: 1.5em;
+}
+    
+#projects {
+    width: 90%;
+    margin: auto;
+}
+
+#projects li {
+    margin: auto;
+    background-color: white;
+    float: left;
+    list-style: none;
+    max-width: 29.03em;    
+    margin-left: 1em;
+    margin-right: 1em;
+    padding: 1ex;
+    overflow: auto;
+}
+
+#projects h3 a.project_name {
+    text-transform: capitalize;
+    font-variant: small-caps;
+}
+
+.project img {
+    float: left;
+    margin: 2ex;
+    height: 100px;
+    width: 100px;
+}
+
+p {
+    margin: 1ex 0px;
+}
+     
+label {
+    display: block;
+}
+
+input {
+    border: 1px solid;
+    width: 35ex;
+}
+
+input[type="submit"] { width: 10ex; }
+
+div.input, div.submit { margin-top: 1ex; }
+
+#register, #login {
+    float: left;
+    width: 40ex;
+    height: 40ex;
+}
+
+/*html {
      font-family: Helvetica, Arial, sans-serif;
      background-color: white;
-     min-width: 800px;
      padding: 0px;
      margin: 0px;
+     
  }
 
 #main {
      width: 80%;
      height: 100%;
-     min-height: 576px;
      margin: auto;
      margin-top: 1ex;   
      clear: both;
      margin-bottom: 1ex;
-
  }
 
-header, footer {    
-    font-family: Garamond, Times New Roman, Times, serif;
-     background-color: #004065;
-     padding: 1ex 5ex 1ex 5ex;
-     margin 0px;
-    color: white;
- }
+body { margin: 0px; padding: 0px;}
+
+header, footer {
+ font-family: Garamond, Times New Roman, Times, serif;
+ background-color: #004065;
+ height: 70px;
+ color: white;
+}
 
 body > header {
      margin-bottom: 1ex;
@@ -269,7 +383,9 @@ body > header {
 
 
  header h1 {
+     float: left;
      font-size: 350%;
+     width: 33.33333%;
  }
  
  header h2 { font-size: 175%;}
@@ -367,6 +483,7 @@ dd { margin-left: 10ex;}
 input { border: 1px solid }
 
 form.new-project div.input { margin: 2.5ex 0;}
+*/
 
 /*
  * Media queries for responsive design

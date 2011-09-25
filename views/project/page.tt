@@ -1,15 +1,12 @@
 
-<header>
-    <h2><% project.name %></h2>
-</header>
+<h2><% project.name %></h2>
 
 <div class="project details">
-<img src="<% project.thumbnail %>">
-<p class="copy sweet-justice"><% project.description %></p>
-<br/>
-<header style="clear:both"><h3>Benefits</h3></header>
+    <img src="<% project.thumbnail %>">
+    <p class="copy sweet-justice"><% project.description %></p><br/>
+<h3>Benefits</h3>
 <p class="copy sweet-justice"><% project.benefits %></p>
-<header style="clear:both"><h3>More Information</h3></header>
+<h3>More Information</h3>
 <p class="copy sweet-justice"><% project.more_info %></p>
 </div>
 

@@ -1,18 +1,78 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
+<!doctype html>  
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
 <head>
-<title>Error 404</title>
-<link rel="stylesheet" href="/css/error.css" />
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Perl Starter</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/css/style.css?v=2"> 
+  <script src="/javascripts/libs/modernizr-1.6.min.js"></script>
 </head>
+
 <body>
-<h1>Error 404</h1>
-<div id="content">
-<h2>Page Not Found</h2><p>Sorry, this is the void.</p>
-</div>
-<div id="footer">
-Powered by <a href="http://perldancer.org/">Dancer</a> 1.2002
-</div>
+
+    <header>
+        <h1>Perl Starter</h1>
+        <nav class="toolbar">
+            <li><a href="/">Home</a></li>                        
+            <li><a href="/project/new">Submit Project</a></li>            
+            <li><% IF session.user %><a href="/logout">Logout</a><% ELSE %><a href="/login">Login</a><% END %></li>
+            <li><a href="/register">Sign Up</a></li>
+        </nav>
+    </header>
+    <div id="content">
+        <% IF error %><div id="error"><% error %></div><% END %>        
+        <% content %>
+    </div>
+    <footer>
+        Powered by <a href="http://perldancer.org/">Dancer</a> <% dancer_version %>
+    </footer>
+
+
+  <!-- Javascript at the bottom for fast page loading -->
+  <script type="text/javascript" charset="utf-8" src='http://github.com/aristus/sweet-justice/raw/master/sweet-justice.min.js'></script> 
+
+  <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery-1.4.2.min.js"%3E%3C/script%3E'))</script>
+  
+  <!-- scripts concatenated and minified via ant build script-->
+  <!-- <script src="/javascripts/plugins.js"></script>
+  <script src="/javascripts/script.js"></script> -->
+  <!-- end concatenated and minified scripts-->
+  
+  
+  <!--[if lt IE 7 ]>
+    <script src="/javascripts/libs/dd_belatedpng.js"></script>
+    <script> DD_belatedPNG.fix('img, .png_bg'); //fix any <img> or .png_bg background-images </script>
+  <![endif]-->
+
+  <!-- yui profiler and profileviewer - remove for production -->
+  <!-- <script src="/javascripts/profiling/yahoo-profiling.min.js"></script>
+  <script src="/javascripts/profiling/config.js"></script> -->
+  <!-- end profiling code -->
+
+
+  <!-- asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet 
+       change the UA-XXXXX-X to be your site's ID -->
+  <!-- <script>
+   var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];
+   (function(d, t) {
+    var g = d.createElement(t),
+        s = d.getElementsByTagName(t)[0];
+    g.async = true;
+    g.src = ('https:' == location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    s.parentNode.insertBefore(g, s);
+   })(document, 'script');
+  </script> -->
+  
 </body>
 </html>
